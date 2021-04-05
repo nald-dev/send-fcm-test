@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            function sendNotification(regid) {
+                fetch(
+                    '/send-notification',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            regid
+                        })
+                    }
+                )
+                .then(res => res.json())
+                .then(resJSON => {
+                    alert(JSON.stringify(resJSON, null, 2))
+                })
+            }
+
+            fetch('/get-all-regid')
+            .then(res => res.json())
+            .then(resJSON => {
+                for (const item of resJSON.data) {
+                    document.getElementById('ordered-list').innerHTML += `
+                        <li>
+                            <a href = 'javascript:void(0)' onclick = 'javascript:sendNotification("${item.regid}"); return false;'>
+                                ${item.regid}
+                            </a>
+                        </li>
+                    `
+                }
+            })
+        </script>
+    </head>
+
+    <body>
+        <ol
+            id='ordered-list'
+        >
+        </ol>
+    </body>
+</html>
